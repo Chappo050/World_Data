@@ -18,7 +18,7 @@ module.exports = gql`
     Freedom: Float!
     Trust_Government_Corruption:  Float!
     Generosity:  Float!
-    Dystopia_Residual:  Float!
+    Dystopia_Residual:  Float
     Year: Int!
   }
   
