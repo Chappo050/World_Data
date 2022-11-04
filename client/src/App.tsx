@@ -9,6 +9,7 @@ import { useQuery } from "@apollo/client";
 import Hamburger from "./components/hamburger";
 import worldMapData from "./topology/world-countries.json";
 import ReactTooltip from "react-tooltip";
+import { BiSearchAlt } from "react-icons/bi";
 
 const geoUrl = worldMapData;
 
@@ -33,8 +34,8 @@ interface CountryData {
 }
 
 const App = () => {
-  const [hovered, setHovered] = useState(false)
-  const [currentCountry, setCurrentCountry] = useState("")
+  const [hovered, setHovered] = useState(false);
+  const [currentCountry, setCurrentCountry] = useState("");
 
   const {
     register,
@@ -45,20 +46,31 @@ const App = () => {
   const onSubmit = (data: any) => console.log(data);
 
   return (
-    <div className="text-white flex flex-row text-5xl">
+    <div className="text-white flex flex-row">
       <Hamburger />
+      <div className="absolute top-20 left-36 w-40 h-56 border border-osmo-600 text-4xl ">
+        {currentCountry}
+      </div>
       <div className="grid grid-cols-10 w-full">
         <div className="col-span-6 col-start-3">
-        <WorldMap hovered={hovered} setCurrentCountry={setCurrentCountry} currentCountry={currentCountry} />
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3 ">
-          <input  className="col-start-2"
-            placeholder="Enter country name to search."
-            {...register("countrySearch", { required: true })}
+          <WorldMap
+            hovered={hovered}
+            setCurrentCountry={setCurrentCountry}
+            currentCountry={currentCountry}
           />
-          <input className="bg-osmo-600 col-start-2 w-full" type="submit" />
-        </form>
-        {currentCountry === "Australia" ? <span>MOMO LIVES HERE!!!!</span>: null}
-        {currentCountry === "Japan" ? <span>SISI LIVES HERE!!!!</span>: null}
+          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3 gap-2">
+            <input
+              className="col-start-2"
+              placeholder="Enter country name to search."
+              {...register("countrySearch", { required: true })}
+            />
+            <button
+              className="bg-osmo-600 col-start-2 w-full items-center justify-center flex "
+              type="submit"
+            >
+              <BiSearchAlt size={25} />
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -84,10 +96,8 @@ const DisplayCountries = () => {
   );
 };
 
-const WorldMap = ({hovered, setCurrentCountry, currentCountry}: any) => {
-
-
-  const handleMove = (e: any,geo:any) => {
+const WorldMap = ({ hovered, setCurrentCountry, currentCountry }: any) => {
+  const handleMove = (e: any, geo: any) => {
     if (hovered) return;
     setCurrentCountry(geo.properties.name);
     console.log(geo.properties.name);
@@ -101,8 +111,9 @@ const WorldMap = ({hovered, setCurrentCountry, currentCountry}: any) => {
 
   return (
     <ComposableMap
-      className="hidden lg:flex col-span-8 col-start-2 scale-y-75 scale-x-125"
+      className="hidden lg:flex col-span-8 col-start-2 scale-y-100 scale-x-125"
       projectionConfig={{
+        scale: 150,
         center: [0, -10],
       }}
     >
@@ -110,8 +121,8 @@ const WorldMap = ({hovered, setCurrentCountry, currentCountry}: any) => {
         {({ geographies }) =>
           geographies.map((geo) => (
             <Geography
-            onMouseEnter={(e) =>handleMove(e,geo)}
-            onMouseLeave={() =>handleExit()}
+              onMouseEnter={(e) => handleMove(e, geo)}
+              onMouseLeave={() => handleExit()}
               key={geo.rsmKey}
               geography={geo}
               stroke="#113c83f6"
