@@ -10795,7 +10795,7 @@
             [[-161, 623]]
           ],
           "type": "MultiPolygon",
-          "properties": { "name": "United States of America", "Alpha-2": "US" },
+          "properties": { "name": "United States", "Alpha-2": "US" },
           "id": "USA"
         },
         {

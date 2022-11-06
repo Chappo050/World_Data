@@ -1,41 +1,37 @@
-import { AnimatePresence, motion, usePresence } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { GET_ALL_COUNTRIES } from "./queries/countryQueries";
-// Import everything needed to use the `useQuery` hook
-import { useQuery } from "@apollo/client";
-import Hamburger from "./components/hamburger";
+//COMPONENETS
+import Databox from "./components/databox";
 import worldMapData from "./topology/world-countries.json";
-import ReactTooltip from "react-tooltip";
+import Hamburger from "./components/hamburger";
 import { BiSearchAlt } from "react-icons/bi";
 
-const geoUrl = worldMapData;
+//GRAPHQL
+import { GET_ALL_COUNTRIES } from "./queries/countryQueries";
+import { useQuery } from "@apollo/client";
 
-interface CountryData {
-  Country: String;
-  Reigon: String;
-  Happiness_Rank: Number;
-  Happiness_Score: Number;
-  Standard_Error: Number;
-  Lower_Confidence_Interval: Number;
-  Upper_Confidence_Interval: Number;
-  Whisker_high: Number;
-  Whisker_low: Number;
-  Economy_GDP_per_Capita: Number;
-  Family: Number;
-  Health_Life_Expectancy: Number;
-  Freedom: Number;
-  Trust_Government_Corruption: Number;
-  Generosity: Number;
-  Dystopia_Residual: Number;
-  Year: Number;
-}
+//LIBRARIES
+import { AnimatePresence, motion, usePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { Listbox } from '@headlessui/react'
+
+
+const geoUrl = worldMapData;
+const years = [
+  { id: 1, year: 2015 },
+  { id: 2, year: 2016 },
+  { id: 3, year: 2017 },
+  { id: 4, year: 2018 },
+  { id: 5, year: 2019 },
+]
+
 
 const App = () => {
   const [hovered, setHovered] = useState(false);
   const [currentCountry, setCurrentCountry] = useState("");
+  const yearRef = useRef(null);
+  const [selectedYear, setSelectedYear] = useState(years[0])
 
   const {
     register,
@@ -48,11 +44,18 @@ const App = () => {
   return (
     <div className="text-white flex flex-row">
       <Hamburger />
-      <div className="absolute top-20 left-36 w-40 h-56 border border-osmo-600 text-4xl ">
-        {currentCountry}
+   
+      <div className="absolute top-10 left-1/2 z-50 text-2xl font-extrabold">
+      <YearListBox selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
       </div>
+      <div className="absolute top-80 left-36">
+         {currentCountry !== "" ? 
+        <Databox country={currentCountry} year={selectedYear.year}/>: null}
+      </div>
+ 
       <div className="grid grid-cols-10 w-full">
         <div className="col-span-6 col-start-3">
+     
           <WorldMap
             hovered={hovered}
             setCurrentCountry={setCurrentCountry}
@@ -141,5 +144,28 @@ const WorldMap = ({ hovered, setCurrentCountry, currentCountry }: any) => {
     </ComposableMap>
   );
 };
+
+function YearListBox({selectedYear, setSelectedYear}: any) {
+
+
+  return (
+    <Listbox value={selectedYear} onChange={setSelectedYear}>
+      <Listbox.Button>{selectedYear.year}</Listbox.Button>
+      <Listbox.Options>
+        {years.map((year) => (
+          <Listbox.Option
+            key={year.id}
+            value={year}
+            className="hover:bg-osmo-400 text-black bg-osmo-200 m-1 p-1 rounded-full text-xl"
+          >
+            {year.year}
+          </Listbox.Option>
+        ))}
+      </Listbox.Options>
+    </Listbox>
+  )
+}
+
+
 
 export default App;

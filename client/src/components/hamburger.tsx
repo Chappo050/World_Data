@@ -41,7 +41,7 @@ const Hamburger = () => {
             }}
             className="rounded-full md:py-1 md:mx-5"
           >
-            Link
+            HOME
           </button>
           <button
             onClick={(e) => {
@@ -51,7 +51,7 @@ const Hamburger = () => {
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
-            Link
+            WORLD MAP
           </button>
           <button
             onClick={(e) => {

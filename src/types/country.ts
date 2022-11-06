@@ -24,7 +24,9 @@ module.exports = gql`
   
   #handle user commands
   type Query {
-    getAllCountries: [Country],
+    getAllCountries: [Country]
+    getCountryData(countryName: String!): [Country]
+    getCountryYearData(countryName: String! year: Int!): Country
   }
 
 `;
