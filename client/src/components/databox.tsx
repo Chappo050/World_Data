@@ -26,7 +26,6 @@ const Databox = ({ country, year }: any) => {
   );
 };
 
-//Use like this to get data
 const DisplayCountries = ({ country, year }: any) => {
   const { loading, error, data } = useQuery(GET_COUNTRY_YEAR_DATA, {
     variables: { countryName: country, year: year },

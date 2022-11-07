@@ -38,4 +38,20 @@ const GET_COUNTRY_YEAR_DATA = gql`
   }
 `;
 
-export { GET_ALL_COUNTRIES, GET_COUNTRY_DATA, GET_COUNTRY_YEAR_DATA };
+const GET_COUNTRY_ALL_YEAR_DATA = gql`
+  query getCountryAllYearData($countryName: String!) {
+    getCountryAllYearData(countryName: $countryName) {
+      Country
+      Year
+      Happiness_Rank
+      Economy_GDP_per_Capita
+      Family
+      Health_Life_Expectancy
+      Freedom
+      Generosity
+      Trust_Government_Corruption
+    }
+  }
+`;
+
+export { GET_ALL_COUNTRIES, GET_COUNTRY_DATA, GET_COUNTRY_YEAR_DATA, GET_COUNTRY_ALL_YEAR_DATA };

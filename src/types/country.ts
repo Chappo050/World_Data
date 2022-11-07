@@ -27,6 +27,7 @@ module.exports = gql`
     getAllCountries: [Country]
     getCountryData(countryName: String!): [Country]
     getCountryYearData(countryName: String! year: Int!): Country
+    getCountryAllYearData(countryName: String!): [Country]
   }
 
 `;

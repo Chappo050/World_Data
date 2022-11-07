@@ -15,6 +15,7 @@ import { AnimatePresence, motion, usePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { Listbox } from '@headlessui/react'
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 const geoUrl = worldMapData;
@@ -32,6 +33,7 @@ const App = () => {
   const [currentCountry, setCurrentCountry] = useState("");
   const yearRef = useRef(null);
   const [selectedYear, setSelectedYear] = useState(years[0])
+const navigate = useNavigate();
 
   const {
     register,
@@ -39,7 +41,7 @@ const App = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (countryName: any, countryCode: any) => navigate(`/country/${countryName}/${countryCode}`)
 
   return (
     <div className="text-white flex flex-row">
@@ -60,6 +62,7 @@ const App = () => {
             hovered={hovered}
             setCurrentCountry={setCurrentCountry}
             currentCountry={currentCountry}
+            onSubmit={onSubmit}
           />
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3 gap-2">
             <input
@@ -99,7 +102,12 @@ const DisplayCountries = () => {
   );
 };
 
-const WorldMap = ({ hovered, setCurrentCountry, currentCountry }: any) => {
+const WorldMap = ({ hovered, setCurrentCountry, currentCountry, onSubmit }: any) => {
+  const handleClick = (e: any, geo: any) => {
+    onSubmit(geo.properties.name, geo.properties["Alpha-2"])
+  };
+  
+  
   const handleMove = (e: any, geo: any) => {
     if (hovered) return;
     setCurrentCountry(geo.properties.name);
@@ -124,6 +132,7 @@ const WorldMap = ({ hovered, setCurrentCountry, currentCountry }: any) => {
         {({ geographies }) =>
           geographies.map((geo) => (
             <Geography
+            onClick={(e) => handleClick(e, geo)}
               onMouseEnter={(e) => handleMove(e, geo)}
               onMouseLeave={() => handleExit()}
               key={geo.rsmKey}

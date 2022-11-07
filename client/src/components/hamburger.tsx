@@ -36,7 +36,7 @@ const Hamburger = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin +  window.location.pathname + "#home";
+              window.location.href = window.location.origin;
               setIsOpen(false);
             }}
             className="rounded-full md:py-1 md:mx-5"
