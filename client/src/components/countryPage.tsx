@@ -1,13 +1,15 @@
 import { AnimatePresence, motion, usePresence } from "framer-motion";
-import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 
 //COMPONENETS
-import Databox from "./databox";
 import Hamburger from "./hamburger";
 import { AiFillInfoCircle } from "react-icons/ai";
+import { FcNext } from "react-icons/fc";
+import { FcPrevious } from "react-icons/fc";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
+import DropdownList from "./dropdownList";
+
 import axios from "axios";
 
 import {
@@ -17,33 +19,245 @@ import {
   GET_COUNTRY_ALL_YEAR_DATA,
 } from "../queries/countryQueries";
 
-const CountryPage = () => {
-  const [countryInfo, setCountryInfo] = useState();
+const { DateTime } = require("luxon");
 
+const newsAPI = axios.create({
+  baseURL: "https://bing-news-search1.p.rapidapi.com/news",
+  headers: {
+    "X-BingApis-SDK": "true",
+    "X-RapidAPI-Key": process.env.REACT_APP_NEWS_API_KEY!,
+    "X-RapidAPI-Host": "bing-news-search1.p.rapidapi.com",
+  },
+});
+
+const newsCatagories = [
+
+  { id: 1, data: "Business" },
+  { id: 2, data: "Entertainment" },
+  { id: 3, data: "Politics" },
+  { id: 4, data: "Sports" },
+  { id: 5, data: "World" },
+  { id: 6, data: "All" },
+];
+interface Providor {
+  _type: String;
+  name: String;
+  image: Object;
+}
+
+interface Article {
+  _type: String;
+  name: String;
+  url: String;
+  image: Object;
+  description: String;
+  provider: Providor[];
+  datePublished: String;
+}
+
+interface News {
+  _type: String;
+  webSearchUrl: String;
+  value: Article[];
+}
+
+const CountryPage = () => {
+  const [countryInfo, setCountryInfo] = useState<News>();
+  const [pointer, setPointer] = useState<number>(3);
   const [flag, setFlag] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(newsCatagories[3]);
 
   let { countryName, code } = useParams();
 
   useEffect(() => {
-    setFlag(`https://flagcdn.com/${code?.toLocaleLowerCase()}.svg`);
-    console.log(code);
+    newsAPI
+      .get("", {
+        params: {
+          cc: code,
+          setLang: "EN",
+          safeSearch: "Off",
+          textFormat: "Raw",
+        },
+      })
+      .then((res) => {
+        const data = res.data;
+        setCountryInfo(data);
+      })
+      .catch((res) =>
+        console.error("Failed to fetch data with category, retying" + res)
+      );
   }, []);
+
+  useEffect(() => {
+    setFlag(`https://flagcdn.com/${code?.toLocaleLowerCase()}.svg`);
+  }, []);
+
+  useEffect(() => {
+    fetchDataWithCat();
+  }, [selectedCategory]);
+
+  const fetchDataWithCat = () => {
+    if (selectedCategory.data !== "All") {
+      newsAPI
+      .get("", {
+        params: {
+          category: selectedCategory.data,
+          cc: code,
+          setLang: "EN",
+          safeSearch: "Off",
+          textFormat: "Raw",
+        },
+      })
+      .then((res) => {
+        const data = res.data;
+        setCountryInfo(data);
+      })
+      .catch((res) =>
+        console.error("Failed to fetch data with category, retying" + res)
+      );
+    }
+    else{
+      newsAPI
+      .get("", {
+        params: {
+          cc: code,
+          setLang: "EN",
+          safeSearch: "Off",
+          textFormat: "Raw",
+        },
+      })
+      .then((res) => {
+        const data = res.data;
+        setCountryInfo(data);
+      })
+      .catch((res) =>
+        console.error("Failed to fetch data with category, retying" + res)
+      );
+    }
+   
+  };
+
+  const HandlePointerIncrease = () => {
+    if (countryInfo?.value.length) {
+      if (countryInfo.value.length >= pointer + 3) {
+        setPointer(pointer + 3);
+      }
+    }
+  };
+
+  const HandlePointerDecrease = () => {
+    if (countryInfo?.value.length) {
+      if (pointer - 3 >= 3) {
+        setPointer(pointer - 3);
+      }
+    }
+  };
 
   return (
     <div>
       <Hamburger />
 
       <div className="flex flex-col">
-        <span className="text-center text-6xl">{countryName}</span>
+        <span className="text-center justify-center text-6xl">
+          {countryName}
+        </span>
         <span className="justify-center flex m-10">
           <img className="w-1/6 " src={flag} alt={countryName}></img>
         </span>
-        <div className=" grid grid-cols-3">
-          <span className="flex justify-center col-start-2">
-            <DisplayCountries country={countryName} />
+        <div className=" grid grid-cols-4">
+          <span className=" col-span-2 pl-20">
+            <div className="text-center">
+              <button className="px-5" onClick={() => HandlePointerDecrease()}>
+                <FcPrevious size={30} />
+              </button>
+              
+              <div className="absolute top-72 left-[24.5%]  text-2xl font-extrabold">
+                {code ===
+                ("AU" || "CA" || "CN" || "IN" || "JP" || "GB" || "US") ? (
+                  <DropdownList
+                    selectedData={selectedCategory}
+                    setSelectedData={setSelectedCategory}
+                    data={newsCatagories}
+                  />
+                ) : (
+                  <span>No categories available in this country.</span>
+                )}
+              </div>
+
+              <button className="px-5" onClick={() => HandlePointerIncrease()}>
+                <FcNext size={30} />
+              </button>
+            </div>
+
+            {countryInfo ? (
+              countryInfo.value
+                .slice(pointer - 3, pointer)
+                .map((article, key) => (
+                  <DisplayNews key={key} article={article} />
+                ))
+            ) : (
+              <></>
+            )}
           </span>
+          <div className=" text-center  w-auto h-auto col-span-2">
+            <DisplayCountries country={countryName} />
+          </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const DisplayNews = ({ article }: { article: Article }) => {
+  const [showMore, setShowMore] = useState<boolean>(false);
+  const timePublished = DateTime.fromISO(article.datePublished).toFormat("ff");
+
+  const link = article.url;
+
+  return (
+    <div className="border-2 border-black w-auto h-auto grid grid-cols-3 m-5 p-4">
+      <span className="overflow-hidden">
+        {article.provider[0].name
+          ? article.provider[0].name
+          : "No Author Found"}
+      </span>
+      <span className=" col-start-3 text-right">{timePublished}</span>
+      <></>
+      <span className="col-span-3 font-extrabold m-5 text-center">
+        {article.name}
+      </span>
+
+      {showMore ? (
+        <>
+          {" "}
+          <span className="col-span-3 m-2 overflow-hidden">
+            {article.description}
+          </span>
+          <a
+            href={link.toString()}
+            className=" col-start-2 text-center w-auto m-2 hover:bg-osmo-300"
+          >
+            Read More...
+          </a>
+          <button
+            className="rounded-full bg-osmo-500 col-start-2 w-auto"
+            onClick={() => {
+              setShowMore(false);
+            }}
+          >
+            Show Less
+          </button>
+        </>
+      ) : (
+        <button
+          className="rounded-full bg-osmo-500 col-start-2 w-auto"
+          onClick={() => {
+            setShowMore(true);
+          }}
+        >
+          Continue Reading
+        </button>
+      )}
     </div>
   );
 };
@@ -58,15 +272,13 @@ const DisplayCountries = ({ country }: any) => {
   if (error) return <p>Error :</p>;
   const returnedData = data.getCountryAllYearData;
 
-  console.log(returnedData);
-
   if (returnedData === null) {
     return <p>No Data Available</p>;
   }
 
   return (
-    <table className=" text-center ">
-      <tbody className="">
+    <table>
+      <tbody className=" w-auto h-auto">
         <DataTooltips />
         {returnedData.map((ele: any) => (
           <tr key={ele.Year} className=" border-2 m-10 p-10 ">
@@ -101,7 +313,6 @@ const DataTooltips = () => {
   ];
 
   const handleTooltip = (col: String) => {
-    console.log(col);
     let text = "";
 
     switch (col) {
@@ -127,12 +338,13 @@ const DataTooltips = () => {
         text = "Sisi is this, cos she is amazing.";
         break;
       case "Family":
-        text = "We have the best family ever. Even though on of our kids is addicted to drugs";
+        text =
+          "We have the best family ever. Even though on of our kids is addicted to drugs";
         break;
       default:
         text = "No data.";
     }
-    setTooltipInfo(text)
+    setTooltipInfo(text);
   };
 
   return (

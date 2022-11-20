@@ -4,7 +4,7 @@ import { FaHamburger } from "react-icons/fa";
 const Hamburger = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="sticky top-0 w-24 scroll-smooth z-50  ">
+    <div className="sticky top-2 left-2 w-24 scroll-smooth z-50  ">
       <button className="  text-3xl m-2 " onClick={() => setIsOpen(true)}>
         <FaHamburger />
       </button>
@@ -46,7 +46,7 @@ const Hamburger = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin + window.location.pathname + "#projects";
+              window.location.href = window.location.origin + "/world";
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
