@@ -1,3 +1,3 @@
 import  CountryModel  from "./HappyData";
-
-module.exports = {CountryModel}
+import  UserModel  from "./User";
+module.exports = {CountryModel, UserModel}

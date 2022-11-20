@@ -25,13 +25,12 @@ const newsAPI = axios.create({
   baseURL: "https://bing-news-search1.p.rapidapi.com/news",
   headers: {
     "X-BingApis-SDK": "true",
-    "X-RapidAPI-Key": process.env.REACT_APP_NEWS_API_KEY!,
+    "X-RapidAPI-Key": "57f149e787mshb35c21467fa240ap1eb47ajsn400c1a713f2b",
     "X-RapidAPI-Host": "bing-news-search1.p.rapidapi.com",
   },
 });
 
 const newsCatagories = [
-
   { id: 1, data: "Business" },
   { id: 2, data: "Entertainment" },
   { id: 3, data: "Politics" },
@@ -65,7 +64,7 @@ const CountryPage = () => {
   const [countryInfo, setCountryInfo] = useState<News>();
   const [pointer, setPointer] = useState<number>(3);
   const [flag, setFlag] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(newsCatagories[3]);
+  const [selectedCategory, setSelectedCategory] = useState(newsCatagories[5]);
 
   let { countryName, code } = useParams();
 
@@ -99,42 +98,40 @@ const CountryPage = () => {
   const fetchDataWithCat = () => {
     if (selectedCategory.data !== "All") {
       newsAPI
-      .get("", {
-        params: {
-          category: selectedCategory.data,
-          cc: code,
-          setLang: "EN",
-          safeSearch: "Off",
-          textFormat: "Raw",
-        },
-      })
-      .then((res) => {
-        const data = res.data;
-        setCountryInfo(data);
-      })
-      .catch((res) =>
-        console.error("Failed to fetch data with category, retying" + res)
-      );
-    }
-    else{
+        .get("", {
+          params: {
+            category: selectedCategory.data,
+            cc: code,
+            setLang: "EN",
+            safeSearch: "Off",
+            textFormat: "Raw",
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          setCountryInfo(data);
+        })
+        .catch((res) =>
+          console.error("Failed to fetch data with category, retying" + res)
+        );
+    } else {
       newsAPI
-      .get("", {
-        params: {
-          cc: code,
-          setLang: "EN",
-          safeSearch: "Off",
-          textFormat: "Raw",
-        },
-      })
-      .then((res) => {
-        const data = res.data;
-        setCountryInfo(data);
-      })
-      .catch((res) =>
-        console.error("Failed to fetch data with category, retying" + res)
-      );
+        .get("", {
+          params: {
+            cc: code,
+            setLang: "EN",
+            safeSearch: "Off",
+            textFormat: "Raw",
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          setCountryInfo(data);
+        })
+        .catch((res) =>
+          console.error("Failed to fetch data with category, retying" + res)
+        );
     }
-   
   };
 
   const HandlePointerIncrease = () => {
@@ -164,14 +161,11 @@ const CountryPage = () => {
         <span className="justify-center flex m-10">
           <img className="w-1/6 " src={flag} alt={countryName}></img>
         </span>
+
         <div className=" grid grid-cols-4">
+
           <span className=" col-span-2 pl-20">
-            <div className="text-center">
-              <button className="px-5" onClick={() => HandlePointerDecrease()}>
-                <FcPrevious size={30} />
-              </button>
-              
-              <div className="absolute top-72 left-[24.5%]  text-2xl font-extrabold">
+          <div className="text-2xl font-extrabold  col-start-3">
                 {code ===
                 ("AU" || "CA" || "CN" || "IN" || "JP" || "GB" || "US") ? (
                   <DropdownList
@@ -180,13 +174,17 @@ const CountryPage = () => {
                     data={newsCatagories}
                   />
                 ) : (
-                  <span>No categories available in this country.</span>
+                  <></>
                 )}
               </div>
-
+            <div className="text-center">
+              <button className="px-5" onClick={() => HandlePointerDecrease()}>
+                <FcPrevious size={30} />
+              </button>
               <button className="px-5" onClick={() => HandlePointerIncrease()}>
                 <FcNext size={30} />
               </button>
+              
             </div>
 
             {countryInfo ? (
@@ -202,6 +200,7 @@ const CountryPage = () => {
           <div className=" text-center  w-auto h-auto col-span-2">
             <DisplayCountries country={countryName} />
           </div>
+          
         </div>
       </div>
     </div>

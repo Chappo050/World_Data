@@ -6,6 +6,8 @@ const resolvers = require('./resolvers');
 const models = require('./models');
 const typeDefs = require('./types');
 const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken");
+const expressJwt = require("express-jwt");
 
 //Interfaces
 interface Error {
@@ -129,6 +131,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.use(compression()); //Compress all routes
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(__dirname, "client", "build")));
+  
 
   app.get("/*", function (req: Request, res: Response) {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));

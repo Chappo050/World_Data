@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express"; //will create a schema
 
 module.exports = gql`
   type Country {
-    id: ID!
+    _id: ID!
     Country: String!
     Reigon: String
     Happiness_Rank:   Int!

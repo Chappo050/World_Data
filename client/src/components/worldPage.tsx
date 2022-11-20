@@ -47,7 +47,7 @@ const navigate = useNavigate();
     <div className="text-white flex flex-row">
       <Hamburger />
    
-      <div className="absolute top-10 left-1/2 z-50 text-2xl font-extrabold">
+      <div className="absolute top-10 left-[50.6%] z-50 text-2xl font-extrabold">
       <DropdownList selectedData={selectedYear} setSelectedData={setSelectedYear} data={years}/>
       </div>
       <div className="absolute top-80 left-36">

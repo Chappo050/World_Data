@@ -1,3 +1,3 @@
 const CountryModel = require('./country');
-
-module.exports = [CountryModel]
+const UserModel = require('./user');
+module.exports = [CountryModel, UserModel]
