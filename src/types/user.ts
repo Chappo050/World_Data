@@ -22,6 +22,10 @@ module.exports = gql`
         subscribedCountries: [String]
     }
 
+    input AppendSubscriptoin{
+       newCountry: String
+    }
+
   type DeletePayload{
         userID: ID!
     }
@@ -36,6 +40,7 @@ module.exports = gql`
   type Mutation {
     createUser(input: CreateUserInput!): User!
     updateUserInfo(userID: ID!, input: UpdateUserInfo!): User!
+    updateSubscriptoins(userID: ID!, input: AppendSubscriptoin!): User!
     deleteUser(userID: ID!): DeletePayload!
   }
 `;
