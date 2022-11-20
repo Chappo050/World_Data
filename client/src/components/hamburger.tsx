@@ -56,12 +56,12 @@ const Hamburger = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin + window.location.pathname + "#education";
+              window.location.href = window.location.origin + "/profile";
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
-            Link
+            Profile
           </button>
           <button
             onClick={(e) => {

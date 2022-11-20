@@ -15,22 +15,21 @@ module.exports = gql`
     password: String!
   }
 
-   input UpdateUserInfo{
+  input UpdateUserInfo {
     username: String
     email: String
     password: String
-        subscribedCountries: [String]
-    }
+    subscribedCountries: [String]
+  }
 
-    input AppendSubscriptoin{
-       newCountry: String
-    }
+  input AppendSubscriptoin {
+    newCountry: String
+  }
 
-  type DeletePayload{
-        userID: ID!
-    }
+  type DeletePayload {
+    userID: ID!
+  }
 
- 
   #handle user commands
   type Query {
     getAllUsers: [User]

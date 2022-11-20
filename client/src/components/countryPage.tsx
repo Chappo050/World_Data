@@ -25,7 +25,7 @@ const newsAPI = axios.create({
   baseURL: "https://bing-news-search1.p.rapidapi.com/news",
   headers: {
     "X-BingApis-SDK": "true",
-    "X-RapidAPI-Key": process.env.REACT_APP_NEWS_API_KEY,
+    "X-RapidAPI-Key": "57f149e787mshb35c21467fa240ap1eb47ajsn400c1a713f2b",
     "X-RapidAPI-Host": "bing-news-search1.p.rapidapi.com",
   },
 });
