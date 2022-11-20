@@ -14,8 +14,11 @@ module.exports = gql`
     email: String!
     password: String!
   }
-  
-   input UpdateUserSubscriptions{
+
+   input UpdateUserInfo{
+    username: String
+    email: String
+    password: String
         subscribedCountries: [String]
     }
 
@@ -32,7 +35,7 @@ module.exports = gql`
 
   type Mutation {
     createUser(input: CreateUserInput!): User!
-    updateSubscriptoins(userID: ID!, input: UpdateUserSubscriptions!): User!
+    updateUserInfo(userID: ID!, input: UpdateUserInfo!): User!
     deleteUser(userID: ID!): DeletePayload!
   }
 `;

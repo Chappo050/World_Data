@@ -5,7 +5,7 @@ module.exports = async (_: any, {userID, input}: any, {models}: any) => {
         userToUpdate[value] = input[value]
     })
 
-    const updatedUserSubscriptions = await userToUpdate.save();
+    const updatedUser = await userToUpdate.save();
 
-    return updatedUserSubscriptions;
+    return updatedUser;
 }
