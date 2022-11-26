@@ -152,7 +152,9 @@ const CountryPage = () => {
 
   return (
     <div>
-      <Hamburger />
+       <div className="absolute left-0">
+        <Hamburger />
+      </div>
 
       <div className="flex flex-col">
         <span className="text-center justify-center text-6xl">

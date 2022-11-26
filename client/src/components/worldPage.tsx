@@ -37,7 +37,6 @@ const World = () => {
   const [selectedYear, setSelectedYear] = useState(years[0]);
   const navigate = useNavigate();
 
-
   const {
     register,
     getValues,
@@ -53,23 +52,28 @@ const World = () => {
 
   const onSearch = () => {
     const data = getValues("country");
-
+    //Search by country name here
     if (Object.values(countryListAlpha2).includes(data)) {
       const code = getKeyByValue(countryListAlpha2, data);
       const country = data;
       navigate(`/country/${country}/${code}`);
-    } else if (countryListAlpha2[data as keyof typeof countryListAlpha2]) {
+    }
+    //Search by country code here
+    else if (countryListAlpha2[data as keyof typeof countryListAlpha2]) {
       const country = countryListAlpha2[data as keyof typeof countryListAlpha2];
       const code = data;
       navigate(`/country/${country}/${code}`);
-    } else window.location.reload();
+    } 
+    //Reload page if not found. Change later
+    else window.location.reload();
   };
 
   return (
-    <div className="text-white flex flex-row">
-      <Hamburger />
-
-      <div className="absolute top-10 left-[50.6%] z-50 text-2xl font-extrabold">
+    <div className="text-white flex justify-center">
+      <div className="absolute left-0">
+        <Hamburger />
+      </div>
+      <div className="absolute top-10 left-[10%] z-50 text-2xl font-extrabold">
         <DropdownList
           selectedData={selectedYear}
           setSelectedData={setSelectedYear}
@@ -82,31 +86,26 @@ const World = () => {
         ) : null}
       </div>
 
-      <div className="grid grid-cols-10 w-full">
-        <div className="col-span-6 col-start-3">
-          <WorldMap
-            hovered={hovered}
-            setCurrentCountry={setCurrentCountry}
-            currentCountry={currentCountry}
-            onSubmit={onSubmit}
+      <div className=" w-[60%]">
+        <WorldMap
+          hovered={hovered}
+          setCurrentCountry={setCurrentCountry}
+          currentCountry={currentCountry}
+          onSubmit={onSubmit}
+        />
+        <form onSubmit={handleSubmit(onSearch)} className="justify-center flex">
+          <input
+            className=" text-black rounded-full text-center"
+            placeholder="Enter country name or code"
+            {...register("country", { required: true })}
           />
-          <form
-            onSubmit={handleSubmit(onSearch)}
-            className="grid grid-cols-3 gap-2"
+          <button
+            className="bg-osmo-600 p-1 m-1 rounded-full hover:bg-osmo-300 "
+            type="submit"
           >
-            <input
-              className="col-start-2 text-black"
-              placeholder="Enter country name or code to search."
-              {...register("country", { required: true })}
-            />
-            <button
-              className="bg-osmo-600 col-start-2 w-full items-center justify-center flex "
-              type="submit"
-            >
-              <BiSearchAlt size={25} />
-            </button>
-          </form>
-        </div>
+            <BiSearchAlt size={30} />
+          </button>
+        </form>
       </div>
     </div>
   );

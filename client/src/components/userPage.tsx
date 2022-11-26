@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 
 //COMPONENETS
-import Databox from "./databox";
 import Hamburger from "./hamburger";
 
 //GRAPHQL
@@ -11,8 +10,10 @@ import { useQuery } from "@apollo/client";
 const UserPage = () => {
 
   return (
-    <div className="text-white flex flex-row">
-      <Hamburger />
+    <div className="text-white flex justify-center">
+      <div className="absolute left-0">
+        <Hamburger />
+      </div>
    
  
       <div className="grid grid-cols-10 w-full">

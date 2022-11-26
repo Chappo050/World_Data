@@ -4,6 +4,7 @@ import App from "./App";
 import CountryPage from "./components/countryPage";
 import World from "./components/worldPage";
 import Profile from "./components/userPage";
+import Register from "./components/registerPage";
 
 const RouteSwitch = () => {
   return (
@@ -13,6 +14,7 @@ const RouteSwitch = () => {
         <Route path="world" element={<World />} />
         <Route path="country/:countryName/:code" element={<CountryPage />}  />
         <Route path="profile" element={<Profile />} />
+        <Route path="register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
