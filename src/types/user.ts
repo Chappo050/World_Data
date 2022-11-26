@@ -7,6 +7,7 @@ module.exports = gql`
     email: String!
     password: String!
     subscribedCountries: [String]
+    token: String
   }
 
   input CreateUserInput {
@@ -26,6 +27,11 @@ module.exports = gql`
     newCountry: String
   }
 
+  input LoginInput {
+    username: String
+    password: String
+  }
+
   type DeletePayload {
     userID: ID!
   }
@@ -37,10 +43,11 @@ module.exports = gql`
   }
 
   type Mutation {
-    createUser(input: CreateUserInput!): User!
+    createUser(input: CreateUserInput!): User
     updateUserInfo(userID: ID!, input: UpdateUserInfo!): User!
     updateSubscriptoins(userID: ID!, input: AppendSubscriptoin!): User!
     deleteUser(userID: ID!): DeletePayload!
+    loginUser(input: LoginInput): User
   }
 `;
 //export this Schema so we can use it in our project

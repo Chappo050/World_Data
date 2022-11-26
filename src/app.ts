@@ -2,10 +2,11 @@
 import { NextFunction, Response, Request, RequestHandler } from "express";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-const resolvers = require('./resolvers');
-const models = require('./models');
-const typeDefs = require('./types');
-const mongoose = require('mongoose');
+import { GraphQLError } from "graphql";
+const resolvers = require("./resolvers");
+const models = require("./models");
+const typeDefs = require("./types");
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 
@@ -36,8 +37,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.set("port", port);
   var httpServer = http.createServer(app);
 
-
-//READ .ENV
+  //READ .ENV
 
   const dotenv = require("dotenv");
   dotenv.config();
@@ -48,8 +48,8 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     resolvers,
     //tell Express to attach GraphQL functionality to the server
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: {models}
-  }) as any;
+    context: { models }
+    ,  }) as any;
 
   await server.start(); //start the GraphQL server.
   server.applyMiddleware({ app });
@@ -109,7 +109,10 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   const mongoose = require("mongoose");
   const mongoDB = process.env.MONGODB_URI;
 
-  mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+  mongoose.connect(mongoDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
   const db = mongoose.connection;
   db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -131,7 +134,6 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.use(compression()); //Compress all routes
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(__dirname, "client", "build")));
-  
 
   app.get("/*", function (req: Request, res: Response) {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
