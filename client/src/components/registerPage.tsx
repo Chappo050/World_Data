@@ -73,7 +73,7 @@ const RegisterPage = () => {
           className=" text-center text-black"
         />
         <label>
-            Password (8 characters, 1 uppercase, 1 lowercase and 1 special character)
+            Password (At least 8 characters)
         </label>
         <input
           {...register("password", {
@@ -81,13 +81,7 @@ const RegisterPage = () => {
             minLength: {
               value: 8,
               message: "Must be longer than 8 characters long.",
-            },
-            pattern: {
-              value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
-              message:
-                " Invalid password. Must contain at least one uppercase letter, one lowercase letter, one number and one special character",
-            },
+            }
           })}
           placeholder="Password"
           className=" text-center text-black"

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { ApolloError } from "apollo-server-errors";
 const jwt = require("jsonwebtoken");
 
-module.exports = async (_: any, { input }: any, { models }: any) => {
+module.exports = async (_: any, { input }: any, {res, models }: any) => {
   return new Promise<void>((resolve, reject) => {
     let newUser: any;
     models.UserModel.findOne({ username: input.username }).exec(
@@ -34,7 +34,7 @@ module.exports = async (_: any, { input }: any, { models }: any) => {
             password: hashedPassword,
             token: token,
           });
-
+          
           resolve(newUser);
         }
       }

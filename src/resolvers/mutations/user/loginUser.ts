@@ -3,7 +3,7 @@ import { ApolloError } from "apollo-server-errors";
 const jwt = require("jsonwebtoken");
 
 const { sign, verify } = jwt;
-module.exports = async (_: any, { input }: any, { models }: any) => {
+module.exports = async (_: any, { input }: any, {res, models }: any) => {
   return new Promise<void>((resolve, reject) => {
     let user: any;
     models.UserModel.findOne({ username: input.username }).exec(
@@ -29,6 +29,7 @@ module.exports = async (_: any, { input }: any, { models }: any) => {
 
             userFound.token = token;
             console.log(userFound);
+            res.cookie('token', token)
             resolve(userFound);
           } else {
             //Incorrect password

@@ -46,10 +46,11 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    //tell Express to attach GraphQL functionality to the server
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: { models }
-    ,  }) as any;
+    context: async ({ req, res }) => {
+      return {res, models };
+    },
+  }) as any;
 
   await server.start(); //start the GraphQL server.
   server.applyMiddleware({ app });

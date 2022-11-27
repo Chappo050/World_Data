@@ -6,12 +6,17 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  gql,
+  createHttpLink
 } from "@apollo/client";
 
+const link = createHttpLink({
+  uri: '/graphql',
+  credentials: 'same-origin'
+});
+
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql",
   cache: new InMemoryCache(),
+  link,
 });
 
 const root = ReactDOM.createRoot(
