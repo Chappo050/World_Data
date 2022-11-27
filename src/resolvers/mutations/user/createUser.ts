@@ -21,9 +21,10 @@ module.exports = async (_: any, { input }: any, {res, models }: any) => {
 
           //Create our JWT
           const token = jwt.sign(
-            { username: input.username },
+            { user: input.username },
             process.env.TOKEN_SECRET,
             {
+              algorithm: "HS256",
               expiresIn: "2h",
             }
           );

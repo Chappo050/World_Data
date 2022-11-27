@@ -5,7 +5,7 @@ import CountryPage from "./components/countryPage";
 import World from "./components/worldPage";
 import Profile from "./components/userPage";
 import Register from "./components/registerPage";
-
+import Login from "./components/loginPage";
 const RouteSwitch = () => {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -15,6 +15,7 @@ const RouteSwitch = () => {
         <Route path="country/:countryName/:code" element={<CountryPage />}  />
         <Route path="profile" element={<Profile />} />
         <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

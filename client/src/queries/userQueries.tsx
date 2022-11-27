@@ -24,6 +24,18 @@ const CREATE_USER = gql`
 }
 `;
 
+const LOGIN_USER = gql`
+  mutation LoginUser($input: LoginInput!) {
+  loginUser(input: $input) {
+    _id
+    username
+    email
+    password
+    subscribedCountries
+  }
+}
+`;
 
 
-export { GET_USER_INFO, CREATE_USER};
+
+export { GET_USER_INFO, CREATE_USER, LOGIN_USER};

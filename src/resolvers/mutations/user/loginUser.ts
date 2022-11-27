@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const { sign, verify } = jwt;
 module.exports = async (_: any, { input }: any, {res, models }: any) => {
   return new Promise<void>((resolve, reject) => {
-    let user: any;
     models.UserModel.findOne({ username: input.username }).exec(
       async (err: Error, userFound: any) => {
         if (err) {
@@ -22,7 +21,7 @@ module.exports = async (_: any, { input }: any, {res, models }: any) => {
             const token = jwt.sign(
               { username: input.username },
               process.env.TOKEN_SECRET,
-              {
+              {algorithm: 'HS256',
                 expiresIn: "2h",
               }
             );

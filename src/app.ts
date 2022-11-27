@@ -7,9 +7,7 @@ const resolvers = require("./resolvers");
 const models = require("./models");
 const typeDefs = require("./types");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const expressJwt = require("express-jwt");
-
+const { expressjwt: jwt } = require("express-jwt");
 //Interfaces
 interface Error {
   status?: number;
@@ -42,13 +40,31 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   const dotenv = require("dotenv");
   dotenv.config();
 
+  //Cookie middleware
+  app.use(cookieParser());
+  app.use(
+    jwt({
+      secret: process.env.TOKEN_SECRET,
+      algorithms: ["HS256"],
+      credentialsRequired: false,
+    })
+  );
+
   //Apollo server
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context: async ({ req, res }) => {
-      return {res, models };
+      const token = req.cookies["token"] || null;
+      let user: any;
+      if (token) {
+        console.log("is user");
+       
+    //    user = jwt.verify(token, process.env.TOKEN_SECRET);
+      }
+
+      return { token, res, models };
     },
   }) as any;
 
@@ -131,7 +147,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.use(logger("dev"));
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
-  app.use(cookieParser());
+
   app.use(compression()); //Compress all routes
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(__dirname, "client", "build")));

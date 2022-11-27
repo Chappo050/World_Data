@@ -66,6 +66,16 @@ const Hamburger = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
+              window.location.href = window.location.origin + "/login";
+              setIsOpen(false);
+            }}
+            className=" rounded-full md:py-1 md:mx-5"
+          >
+            Login
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
               window.location.href = window.location.origin + "/register";
               setIsOpen(false);
             }}
@@ -73,16 +83,7 @@ const Hamburger = () => {
           >
             Register
           </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = window.location.origin + "#contact";
-              setIsOpen(false);
-            }}
-            className=" rounded-full md:py-1 md:mx-5"
-          >
-            Link
-          </button>
+         
         </nav>
       </div>
     </div>

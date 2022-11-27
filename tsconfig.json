@@ -9,5 +9,6 @@
       "esModuleInterop": true,
       "lib": ["es2018", "esnext.asynciterable"],
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "files":["src/types.d.ts"]
 }

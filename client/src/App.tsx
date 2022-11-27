@@ -1,13 +1,8 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
 
 //COMPONENETS
 import Hamburger from "./components/hamburger";
-import World from "./components/worldPage";
 
 //LIBRARIES
-import { AnimatePresence, motion, usePresence } from "framer-motion";
-import { Listbox } from "@headlessui/react";
-import { Navigate, useNavigate } from "react-router-dom";
 
 const App = () => {
   return (
