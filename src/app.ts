@@ -2,12 +2,12 @@
 import { NextFunction, Response, Request, RequestHandler } from "express";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { GraphQLError } from "graphql";
 const resolvers = require("./resolvers");
 const models = require("./models");
 const typeDefs = require("./types");
-const mongoose = require("mongoose");
 const { expressjwt: jwt } = require("express-jwt");
+import {decodedToken} from './authenticate';
+
 //Interfaces
 interface Error {
   status?: number;
@@ -55,16 +55,10 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: async ({ req, res }) => {
-      const token = req.cookies["token"] || null;
-      let user: any;
-      if (token) {
-        console.log("is user");
-       
-    //    user = jwt.verify(token, process.env.TOKEN_SECRET);
-      }
-
-      return { token, res, models };
+    context: ({ req, res }) => {
+      const user = decodedToken(req).username
+      console.log(user); 
+      return {user, req, res, models };
     },
   }) as any;
 

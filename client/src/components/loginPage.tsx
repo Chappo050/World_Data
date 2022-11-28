@@ -63,11 +63,13 @@ const LoginPage = () => {
         <input
           {...register("password", {
             required: true,
+        
             minLength: {
               value: 8,
               message: "Must be longer than 8 characters long.",
             }
           })}
+          type="password"
           placeholder="Password"
           className=" text-center text-black"
         />

@@ -83,6 +83,7 @@ const RegisterPage = () => {
               message: "Must be longer than 8 characters long.",
             }
           })}
+          type="password"
           placeholder="Password"
           className=" text-center text-black"
         />

@@ -1,8 +1,6 @@
-import { ObjectId } from "mongoose"
+import {decodedToken} from '../../../authenticate';
+module.exports = async (_:any, {userID}: any, {user,models}: any ) => {
 
-module.exports = async (_:any, {userID}: any, {token,models}: any ) => {
-
-  console.log(token); 
   
-    return await models.UserModel.findOne({username: userID})
+    return await models.UserModel.findOne({username: user})
   }
