@@ -43,7 +43,7 @@ module.exports = gql`
   #handle user commands
   type Query {
     getAllUsers: [User]
-    getUserInfo(userID: ID!): User
+    getUserInfo: User
   }
 
 

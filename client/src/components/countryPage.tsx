@@ -61,7 +61,7 @@ interface News {
 }
 
 const CountryPage = () => {
-  const [countryInfo, setCountryInfo] = useState<News>();
+  const [countryNews, setCountryNews] = useState<News>();
   const [pointer, setPointer] = useState<number>(3);
   const [flag, setFlag] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(newsCatagories[5]);
@@ -80,7 +80,7 @@ const CountryPage = () => {
       })
       .then((res) => {
         const data = res.data;
-        setCountryInfo(data);
+        setCountryNews(data);
       })
       .catch((res) =>
         console.error("Failed to fetch data with category, retying" + res)
@@ -109,7 +109,7 @@ const CountryPage = () => {
         })
         .then((res) => {
           const data = res.data;
-          setCountryInfo(data);
+          setCountryNews(data);
         })
         .catch((res) =>
           console.error("Failed to fetch data with category, retying" + res)
@@ -126,7 +126,7 @@ const CountryPage = () => {
         })
         .then((res) => {
           const data = res.data;
-          setCountryInfo(data);
+          setCountryNews(data);
         })
         .catch((res) =>
           console.error("Failed to fetch data with category, retying" + res)
@@ -135,15 +135,15 @@ const CountryPage = () => {
   };
 
   const HandlePointerIncrease = () => {
-    if (countryInfo?.value.length) {
-      if (countryInfo.value.length >= pointer + 3) {
+    if (countryNews?.value.length) {
+      if (countryNews.value.length >= pointer + 3) {
         setPointer(pointer + 3);
       }
     }
   };
 
   const HandlePointerDecrease = () => {
-    if (countryInfo?.value.length) {
+    if (countryNews?.value.length) {
       if (pointer - 3 >= 3) {
         setPointer(pointer - 3);
       }
@@ -189,8 +189,8 @@ const CountryPage = () => {
               
             </div>
 
-            {countryInfo ? (
-              countryInfo.value
+            {countryNews ? (
+              countryNews.value
                 .slice(pointer - 3, pointer)
                 .map((article, key) => (
                   <DisplayNews key={key} article={article} />
@@ -199,7 +199,7 @@ const CountryPage = () => {
               <></>
             )}
           </span>
-          <div className=" text-center  w-auto h-auto col-span-2">
+          <div className=" text-center place-self-center w-auto h-auto col-span-2">
             <DisplayCountries country={countryName} />
           </div>
           
