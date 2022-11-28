@@ -28,7 +28,6 @@ module.exports = async (_: any, { input }: any, {res, models }: any) => {
               console.log(jwt.verify(token,process.env.TOKEN_SECRET ));
               
             userFound.token = token;
-            console.log(userFound);
             res.cookie('token', token)
             resolve(userFound);
           } else {

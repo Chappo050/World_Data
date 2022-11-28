@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { FaHamburger } from "react-icons/fa";
+import { useMutation } from "@apollo/client";
+import { LOGOUT_USER } from "../queries/userQueries";
 
 const Hamburger = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [logoutUser] = useMutation(LOGOUT_USER);
+
+  const handleLogout = () => {
+    logoutUser().catch((err) => console.log(err));
+  };
+
   return (
     <div className="sticky top-2 left-2 w-24 scroll-smooth z-50  ">
       <button className="  text-3xl m-2 " onClick={() => setIsOpen(true)}>
@@ -17,10 +25,7 @@ const Hamburger = () => {
       >
         <div className="-mx-3 pl-3 pr-1 flex items-center justify-between">
           <span />
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-white "
-          >
+          <button onClick={() => setIsOpen(false)} className="text-white ">
             <svg fill="none" viewBox="0 0 24 24" className="h-6 w-6">
               <path
                 d="M6 18L18 6M6 6L18 18"
@@ -83,7 +88,17 @@ const Hamburger = () => {
           >
             Register
           </button>
-         
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+              window.location.href = window.location.origin;
+              setIsOpen(false);
+            }}
+            className=" rounded-full md:py-1 md:mx-5"
+          >
+            Logout
+          </button>
         </nav>
       </div>
     </div>

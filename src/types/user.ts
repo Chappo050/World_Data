@@ -36,11 +36,16 @@ module.exports = gql`
     userID: ID!
   }
 
+  type LogoutData {
+    username: String
+  }
+
   #handle user commands
   type Query {
     getAllUsers: [User]
     getUserInfo(userID: ID!): User
   }
+
 
   type Mutation {
     createUser(input: CreateUserInput!): User
@@ -48,6 +53,7 @@ module.exports = gql`
     updateSubscriptoins(userID: ID!, input: AppendSubscriptoin!): User!
     deleteUser(userID: ID!): DeletePayload!
     loginUser(input: LoginInput): User
+    logoutUser: LogoutData
   }
 `;
 //export this Schema so we can use it in our project

@@ -6,7 +6,7 @@ const resolvers = require("./resolvers");
 const models = require("./models");
 const typeDefs = require("./types");
 const { expressjwt: jwt } = require("express-jwt");
-import {decodedToken} from './authenticate';
+import { decodedToken } from "./authenticate";
 
 //Interfaces
 interface Error {
@@ -46,6 +46,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     jwt({
       secret: process.env.TOKEN_SECRET,
       algorithms: ["HS256"],
+      expiresIn: "2s",
       credentialsRequired: false,
     })
   );
@@ -56,9 +57,16 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context: ({ req, res }) => {
-      const user = decodedToken(req).username
-      console.log(user); 
-      return {user, req, res, models };
+      //can move into each resolver if needed.
+      let user: String | null;
+      if (req.cookies["token"]) {
+        user = decodedToken(req);
+        console.log(user);
+      } else {
+        user = null;
+      }
+
+      return { user, req, res, models };
     },
   }) as any;
 

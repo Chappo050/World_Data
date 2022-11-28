@@ -1,6 +1,4 @@
-import {decodedToken} from '../../../authenticate';
-module.exports = async (_:any, {userID}: any, {user,models}: any ) => {
-
+module.exports = async (_:any, {}, {res,user,models}: any ) => {
   
-    return await models.UserModel.findOne({username: user})
+    return await models.UserModel.findOne({username: user.username})
   }
