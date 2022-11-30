@@ -7,7 +7,8 @@ const GET_USER_INFO = gql`
         _id
         username
         email
-        subscribedCountries
+        subscribedCountriesCode
+        subscribedCountriesName
     }
   }
 `;
@@ -19,7 +20,15 @@ const CREATE_USER = gql`
     username
     email
     password
-    subscribedCountries
+  }
+}
+`;
+
+const UPDATE_USER_INFO = gql`
+mutation UpdateUserInfo($input: UpdateUserInfo!) {
+  updateUserInfo(input: $input) {
+    subscribedCountriesCode
+    subscribedCountriesName
   }
 }
 `;
@@ -31,7 +40,6 @@ const LOGIN_USER = gql`
     username
     email
     password
-    subscribedCountries
   }
 }
 `;
@@ -46,4 +54,4 @@ const LOGOUT_USER = gql`
 
 
 
-export { GET_USER_INFO, CREATE_USER, LOGIN_USER,LOGOUT_USER};
+export { GET_USER_INFO, CREATE_USER, LOGIN_USER,LOGOUT_USER, UPDATE_USER_INFO};

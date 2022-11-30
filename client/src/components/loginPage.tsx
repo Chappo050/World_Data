@@ -40,7 +40,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="absolute left-0 text-white">
+      <div className=" text-white">
         <Hamburger />
       </div>
       <form

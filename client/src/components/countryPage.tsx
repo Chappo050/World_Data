@@ -3,21 +3,16 @@ import { useEffect, useRef, useState } from "react";
 
 //COMPONENETS
 import Hamburger from "./hamburger";
-import { AiFillInfoCircle } from "react-icons/ai";
+import DataTooltips from "./dataTooltips";
 import { FcNext } from "react-icons/fc";
 import { FcPrevious } from "react-icons/fc";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import DropdownList from "./dropdownList";
 
 import axios from "axios";
-
-import {
-  GET_ALL_COUNTRIES,
-  GET_COUNTRY_DATA,
-  GET_COUNTRY_YEAR_DATA,
-  GET_COUNTRY_ALL_YEAR_DATA,
-} from "../queries/countryQueries";
+import { GET_USER_INFO, UPDATE_USER_INFO } from "../queries/userQueries";
+import { GET_COUNTRY_ALL_YEAR_DATA } from "../queries/countryQueries";
 
 const { DateTime } = require("luxon");
 
@@ -61,11 +56,13 @@ interface News {
 }
 
 const CountryPage = () => {
+  const { loading, error, data } = useQuery(GET_USER_INFO);
+  const [updateUserInfo, { loading:update_loading, error:update_error, data:update_data }] = useMutation(UPDATE_USER_INFO);
   const [countryNews, setCountryNews] = useState<News>();
+  const [isSubscribed, setIsSubscribed] = useState<Boolean>(false);
   const [pointer, setPointer] = useState<number>(3);
   const [flag, setFlag] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(newsCatagories[5]);
-
   let { countryName, code } = useParams();
 
   useEffect(() => {
@@ -90,6 +87,16 @@ const CountryPage = () => {
   useEffect(() => {
     setFlag(`https://flagcdn.com/${code?.toLocaleLowerCase()}.svg`);
   }, []);
+
+  useEffect(() => {
+    if (code && data) {
+      const countryCodeList: any = data.getUserInfo.subscribedCountriesCode;
+
+      if (countryCodeList.includes(code)) {
+        setIsSubscribed(true);
+      }
+    }
+  }, [data]);
 
   useEffect(() => {
     fetchDataWithCat();
@@ -150,13 +157,64 @@ const CountryPage = () => {
     }
   };
 
+  const subscribe = () => {
+    updateUserInfo({
+      variables: {
+        input: {
+          subscribedCountriesCode: [
+            code,
+            ...data.getUserInfo.subscribedCountriesCode,
+          ],
+          subscribedCountriesName: [
+            countryName,
+            ...data.getUserInfo.subscribedCountriesName,
+          ],
+        },
+      },
+    }).then(  res =>   setIsSubscribed(true)).catch((err) => console.log(err));
+  };
+
+  const unsubscribe = () => {
+    const updatedListCode = data.getUserInfo.subscribedCountriesCode.filter(
+      (e: String) => e !== code
+    );
+    const updatedListName = data.getUserInfo.subscribedCountriesName.filter(
+      (e: String) => e !== countryName
+    );
+    updateUserInfo({
+      variables: {
+        input: {
+          subscribedCountriesCode: [...updatedListCode],
+          subscribedCountriesName: [...updatedListName],
+        },
+      },
+    }).then(  res =>   setIsSubscribed(false)).catch((err) => console.log(err));
+  };
+
   return (
     <div>
-       <div className="absolute left-0">
+      <div className="">
         <Hamburger />
       </div>
 
       <div className="flex flex-col">
+        {isSubscribed ? (
+          <button
+            onClick={() => unsubscribe()}
+            className=" w-auto bg-osmo-800 justify-center hover:bg-osmo-500"
+          >
+            {" "}
+            Unsubscribe
+          </button>
+        ) : (
+          <button
+            onClick={() => subscribe()}
+            className=" w-auto bg-osmo-500 justify-center hover:bg-osmo-300"
+          >
+            Subscribe
+          </button>
+        )}
+
         <span className="text-center justify-center text-6xl">
           {countryName}
         </span>
@@ -165,20 +223,19 @@ const CountryPage = () => {
         </span>
 
         <div className=" grid grid-cols-4">
-
           <span className=" col-span-2 pl-20">
-          <div className="text-2xl font-extrabold  col-start-3">
-                {code ===
-                ("AU" || "CA" || "CN" || "IN" || "JP" || "GB" || "US") ? (
-                  <DropdownList
-                    selectedData={selectedCategory}
-                    setSelectedData={setSelectedCategory}
-                    data={newsCatagories}
-                  />
-                ) : (
-                  <></>
-                )}
-              </div>
+            <div className="text-2xl font-extrabold  col-start-3">
+              {code ===
+              ("AU" || "CA" || "CN" || "IN" || "JP" || "GB" || "US") ? (
+                <DropdownList
+                  selectedData={selectedCategory}
+                  setSelectedData={setSelectedCategory}
+                  data={newsCatagories}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
             <div className="text-center">
               <button className="px-5" onClick={() => HandlePointerDecrease()}>
                 <FcPrevious size={30} />
@@ -186,7 +243,6 @@ const CountryPage = () => {
               <button className="px-5" onClick={() => HandlePointerIncrease()}>
                 <FcNext size={30} />
               </button>
-              
             </div>
 
             {countryNews ? (
@@ -202,7 +258,6 @@ const CountryPage = () => {
           <div className=" text-center place-self-center w-auto h-auto col-span-2">
             <DisplayCountries country={countryName} />
           </div>
-          
         </div>
       </div>
     </div>
@@ -295,73 +350,6 @@ const DisplayCountries = ({ country }: any) => {
         ))}
       </tbody>
     </table>
-  );
-};
-
-const DataTooltips = () => {
-  const [isTooltip, setIsTooltip] = useState(false);
-  const [tooltipInfo, setTooltipInfo] = useState("No info");
-
-  const titles: String[] = [
-    "Year",
-    "Rank",
-    "Freedom",
-    "Trust",
-    "Health",
-    "Economy",
-    "Generosity",
-    "Family",
-  ];
-
-  const handleTooltip = (col: String) => {
-    let text = "";
-
-    switch (col) {
-      case "Year":
-        text = "The year in which the data represents.";
-        break;
-      case "Rank":
-        text = "The countries happiness rank.";
-        break;
-      case "Freedom":
-        text = "Freedom info";
-        break;
-      case "Trust":
-        text = "Trust info";
-        break;
-      case "Health":
-        text = "Health info";
-        break;
-      case "Economy":
-        text = "Economy info";
-        break;
-      case "Generosity":
-        text = "Sisi is this, cos she is amazing.";
-        break;
-      case "Family":
-        text =
-          "We have the best family ever. Even though on of our kids is addicted to drugs";
-        break;
-      default:
-        text = "No data.";
-    }
-    setTooltipInfo(text);
-  };
-
-  return (
-    <>
-      {titles.map((col: String) => (
-        <>
-          <th
-            className="p-4 text-center "
-            title={tooltipInfo}
-            onMouseEnter={() => handleTooltip(col)}
-          >
-            <AiFillInfoCircle size={14} /> {col}{" "}
-          </th>
-        </>
-      ))}
-    </>
   );
 };
 

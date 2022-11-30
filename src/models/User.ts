@@ -6,7 +6,8 @@ const User = new Schema({
   username: { type:String, unique: true},
   email: { type:String, unique: true},
   password: String,
-  subscribedCountries: [String],
+  subscribedCountriesCode: [String],
+  subscribedCountriesName: [String],
   token: {type: String},
 });
 

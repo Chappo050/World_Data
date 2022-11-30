@@ -1,5 +1,5 @@
-module.exports = async (_: any, {userID, input}: any, {models}: any) => {
-    const userToUpdate = await models.UserModel.findOne({_id: userID});
+module.exports = async (_: any, {input}: any, {user, models}: any) => {
+    const userToUpdate = await models.UserModel.findOne({username: "poop"});
 
     Object.keys(input).forEach(value => {
         userToUpdate[value] = input[value]

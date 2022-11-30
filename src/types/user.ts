@@ -6,7 +6,8 @@ module.exports = gql`
     username: String!
     email: String!
     password: String!
-    subscribedCountries: [String]
+    subscribedCountriesCode: [String]
+    subscribedCountriesName: [String]
     token: String
   }
 
@@ -20,10 +21,11 @@ module.exports = gql`
     username: String
     email: String
     password: String
-    subscribedCountries: [String]
+    subscribedCountriesCode: [String]
+    subscribedCountriesName: [String]
   }
 
-  input AppendSubscriptoin {
+  input AppendSubscription {
     newCountry: String
   }
 
@@ -49,8 +51,8 @@ module.exports = gql`
 
   type Mutation {
     createUser(input: CreateUserInput!): User
-    updateUserInfo(userID: ID!, input: UpdateUserInfo!): User!
-    updateSubscriptoins(userID: ID!, input: AppendSubscriptoin!): User!
+    updateUserInfo(input: UpdateUserInfo!): User!
+    updateSubscriptions(userID: ID!, input: AppendSubscription!): User!
     deleteUser(userID: ID!): DeletePayload!
     loginUser(input: LoginInput): User
     logoutUser: LogoutData
