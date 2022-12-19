@@ -236,20 +236,16 @@ const CountryPage = () => {
                 <></>
               )}
             </div>
-            <div className="text-center">
-              <button className="px-5" onClick={() => HandlePointerDecrease()}>
-                <FcPrevious size={30} />
-              </button>
-              <button className="px-5" onClick={() => HandlePointerIncrease()}>
-                <FcNext size={30} />
-              </button>
-            </div>
-
             {countryNews ? (
               countryNews.value
                 .slice(pointer - 3, pointer)
                 .map((article, key) => (
+                  <div>
+                  <p className="relative text-3xl"> {countryName}</p>  
+                  <div key={key} className=" h-96 overflow-y-auto scrollbar">
                   <DisplayNews key={key} article={article} />
+                  </div>
+                  </div>
                 ))
             ) : (
               <></>

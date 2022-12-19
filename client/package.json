@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "proxy": "http://localhost:5000",
   "private": true,
-  "homepage": "https://mlchaplin.dev",
   "dependencies": {
     "@apollo/client": "^3.7.1",
     "@headlessui/react": "^1.7.4",
