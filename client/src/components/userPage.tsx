@@ -7,7 +7,17 @@ import  DataTooltips  from "./dataTooltips";
 //GRAPHQL
 import { GET_USER_INFO } from "../queries/userQueries";
 import { GET_COUNTRY_ALL_YEAR_DATA} from "../queries/countryQueries";
-
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { RadioGroup } from "@headlessui/react";
 import { useQuery } from "@apollo/client";
 const newsAPI = axios.create({
   baseURL: "https://bing-news-search1.p.rapidapi.com/news",
@@ -43,6 +53,7 @@ interface News {
 }
 
 const UserPage = () => {
+  const [field, setField] = useState<String>("Happiness_Rank");
   let navigate = useNavigate()
   const { loading, error, data } = useQuery(GET_USER_INFO);
   if (loading) return <p>Loading...</p>;
@@ -83,16 +94,19 @@ const UserPage = () => {
 
         <div className=" p-5 text-4xl">
           <h2 className="py-10 underline">Subscribes Countries Data</h2>
+          <span className="text-base"><GraphRadioButtons field={field} setField={setField}  /></span>
           <div className="grid grid-cols-3 border-2 p-5 text-base gap-10">
             {Object.values(userData.getUserInfo.subscribedCountriesName).map(
               (item: any, i) => (
                 <div>
 
                 <p className="relative text-3xl"> {item}</p>  
-                <div key={i} className=" h-96 overflow-y-auto scrollbar">
               
-                  <DisplayCountryData country={item} />
-                </div>
+                <div className=" text-center place-self-center w-auto h-auto col-span-2">
+          
+            <GraphData country={item} field={field} />
+          </div>
+        
                 </div>
               )
             )}
@@ -191,40 +205,87 @@ const DisplayNews = ({ countryCode }: { countryCode: string }) => {
   );
 };
 
-//Use like this to get data
-const DisplayCountryData = ({ country }: any) => {
+const GraphData = ({ country, field }: any) => {
   const { loading, error, data } = useQuery(GET_COUNTRY_ALL_YEAR_DATA, {
     variables: { countryName: country },
   });
-  console.log(country);
-  
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :</p>;
   const returnedData = data.getCountryAllYearData;
+console.log(returnedData);
 
   if (returnedData === null) {
     return <p>No Data Available</p>;
   }
 
   return (
-    <table>
-      <tbody className=" w-auto h-auto">
-        <DataTooltips />
-        {returnedData.map((ele: any) => (
-          <tr key={ele.Year} className=" border-2 m-10 p-10 ">
-            <td>{ele.Year}</td>
-            <td> {ele.Happiness_Rank}</td>
-            <td>{ele.Freedom.toFixed(2)}</td>
-            <td> {ele.Trust_Government_Corruption.toFixed(2)}</td>
-            <td> {ele.Health_Life_Expectancy.toFixed(2)}</td>
-            <td> {ele.Economy_GDP_per_Capita.toFixed(2)}</td>
-            <td> {ele.Generosity.toFixed(2)}</td>
-            <td> {ele.Family.toFixed(2)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ResponsiveContainer width={500} height={400}>
+      <LineChart
+        data={returnedData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="5 10" />
+        <XAxis dataKey="Year" reversed={true} />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+
+        <Line
+          type="monotone"
+          dataKey={field}
+          stroke="	#8B4000"
+          strokeWidth = '3'
+          activeDot={{ r: 6 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
+
+const GraphRadioButtons = ({field, setField}: any) => {
+  return (
+    <RadioGroup value={field} onChange={setField} className='grid grid-cols-2 text-white '>
+      <RadioGroup.Option value="Happiness_Rank" >
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Happiness_Rank</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Freedom">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Freedom</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Economy_GDP_per_Capita">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Economy_GDP_per_Capita</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Family">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Family</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Health_Life_Expectancy">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Health_Life_Expectancy</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Generosity">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Generosity</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Trust_Government_Corruption">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Trust_Government_Corruption</span>
+        )}
+      </RadioGroup.Option>
+    </RadioGroup>
   );
 };
 

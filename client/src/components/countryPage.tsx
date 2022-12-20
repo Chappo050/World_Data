@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
-
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 //COMPONENETS
 import Hamburger from "./hamburger";
 import DataTooltips from "./dataTooltips";
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import DropdownList from "./dropdownList";
-
+import { RadioGroup } from "@headlessui/react";
 import axios from "axios";
 import { GET_USER_INFO, UPDATE_USER_INFO } from "../queries/userQueries";
 import { GET_COUNTRY_ALL_YEAR_DATA } from "../queries/countryQueries";
@@ -58,14 +67,15 @@ const CountryPage = () => {
     updateUserInfo,
     { loading: update_loading, error: update_error, data: update_data },
   ] = useMutation(UPDATE_USER_INFO);
-  const [isLogged, setIsLogged] = useState<Boolean>(false)
+  const [isLogged, setIsLogged] = useState<Boolean>(false);
   const [countryNews, setCountryNews] = useState<News>();
   const [isSubscribed, setIsSubscribed] = useState<Boolean>(false);
   const [flag, setFlag] = useState("");
+  const [field, setField] = useState<String>("Happiness_Rank");
   const [selectedCategory, setSelectedCategory] = useState(newsCatagories[5]);
   let { countryName, code } = useParams();
 
-  useEffect(() => {
+  /*useEffect(() => {
     newsAPI
       .get("", {
         params: {
@@ -83,7 +93,7 @@ const CountryPage = () => {
         console.error("Failed to fetch data with category, retying" + res)
       );
   }, []);
-
+*/
   useEffect(() => {
     setFlag(`https://flagcdn.com/${code?.toLocaleLowerCase()}.svg`);
   }, []);
@@ -97,10 +107,10 @@ const CountryPage = () => {
       }
     }
     if (data) {
-      setIsLogged(true)
+      setIsLogged(true);
     }
   }, [data]);
-
+  /*
   useEffect(() => {
     fetchDataWithCat();
   }, [selectedCategory]);
@@ -143,7 +153,7 @@ const CountryPage = () => {
         );
     }
   };
-
+*/
   const subscribe = () => {
     updateUserInfo({
       variables: {
@@ -189,24 +199,29 @@ const CountryPage = () => {
       </div>
 
       <div className="flex flex-col">
-      {isLogged? <> {isSubscribed ? (
-          <button
-            onClick={() => unsubscribe()}
-            className=" w-auto bg-osmo-800 justify-center hover:bg-osmo-500"
-          >
+        {isLogged ? (
+          <>
             {" "}
-            Unsubscribe
-          </button>
+            {isSubscribed ? (
+              <button
+                onClick={() => unsubscribe()}
+                className=" w-auto bg-osmo-800 justify-center hover:bg-osmo-500"
+              >
+                {" "}
+                Unsubscribe
+              </button>
+            ) : (
+              <button
+                onClick={() => subscribe()}
+                className=" w-auto bg-osmo-500 justify-center hover:bg-osmo-300"
+              >
+                Subscribe
+              </button>
+            )}
+          </>
         ) : (
-          <button
-            onClick={() => subscribe()}
-            className=" w-auto bg-osmo-500 justify-center hover:bg-osmo-300"
-          >
-            Subscribe
-          </button>
-        )}</>: <></>}
-       
-       
+          <></>
+        )}
 
         <span className="text-center justify-center text-6xl">
           {countryName}
@@ -231,17 +246,18 @@ const CountryPage = () => {
             </div>
             <div className=" h-[500px] overflow-y-auto scrollbar">
               {countryNews ? (
-                countryNews.value
-                  .map((article, key) => (
-                    <DisplayNews key={key} article={article} />
-                  ))
+                countryNews.value.map((article, key) => (
+                  // <DisplayNews key={key} article={article} />
+                  <p>d</p>
+                ))
               ) : (
-                <></>
+                <span>Loading news, please wait...</span>
               )}
             </div>
           </span>
           <div className=" text-center place-self-center w-auto h-auto col-span-2">
-            <DisplayCountries country={countryName} />
+            <GraphRadioButtons field={field} setField={setField} />
+            <GraphData country={countryName} field={field} />
           </div>
         </div>
       </div>
@@ -303,38 +319,87 @@ const DisplayNews = ({ article }: { article: Article }) => {
   );
 };
 
-//Use like this to get data
-const DisplayCountries = ({ country }: any) => {
+const GraphData = ({ country, field }: any) => {
   const { loading, error, data } = useQuery(GET_COUNTRY_ALL_YEAR_DATA, {
     variables: { countryName: country },
   });
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :</p>;
   const returnedData = data.getCountryAllYearData;
+console.log(returnedData);
 
   if (returnedData === null) {
     return <p>No Data Available</p>;
   }
 
   return (
-    <table>
-      <tbody className=" w-auto h-auto">
-        <DataTooltips />
-        {returnedData.map((ele: any) => (
-          <tr key={ele.Year} className=" border-2 m-10 p-10 ">
-            <td>{ele.Year}</td>
-            <td> {ele.Happiness_Rank}</td>
-            <td>{ele.Freedom.toFixed(2)}</td>
-            <td> {ele.Trust_Government_Corruption.toFixed(2)}</td>
-            <td> {ele.Health_Life_Expectancy.toFixed(2)}</td>
-            <td> {ele.Economy_GDP_per_Capita.toFixed(2)}</td>
-            <td> {ele.Generosity.toFixed(2)}</td>
-            <td> {ele.Family.toFixed(2)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ResponsiveContainer width={700} height={500}>
+      <LineChart
+        data={returnedData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="5 10" />
+        <XAxis dataKey="Year" reversed={true} />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+
+        <Line
+          type="monotone"
+          dataKey={field}
+          stroke="	#8B4000"
+          strokeWidth = '3'
+          activeDot={{ r: 6 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
+
+const GraphRadioButtons = ({field, setField}: any) => {
+  return (
+    <RadioGroup value={field} onChange={setField} className='grid grid-cols-2 text-white '>
+      <RadioGroup.Option value="Happiness_Rank" >
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Happiness_Rank</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Freedom">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Freedom</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Economy_GDP_per_Capita">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Economy_GDP_per_Capita</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Family">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Family</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Health_Life_Expectancy">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Health_Life_Expectancy</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Generosity">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Generosity</span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="Trust_Government_Corruption">
+        {({ checked }) => (
+          <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Trust_Government_Corruption</span>
+        )}
+      </RadioGroup.Option>
+    </RadioGroup>
   );
 };
 
