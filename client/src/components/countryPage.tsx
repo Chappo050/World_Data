@@ -6,12 +6,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 //COMPONENETS
 import Hamburger from "./hamburger";
-import DataTooltips from "./dataTooltips";
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import DropdownList from "./dropdownList";
@@ -75,7 +73,7 @@ const CountryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(newsCatagories[5]);
   let { countryName, code } = useParams();
 
-  /*useEffect(() => {
+  useEffect(() => {
     newsAPI
       .get("", {
         params: {
@@ -93,7 +91,7 @@ const CountryPage = () => {
         console.error("Failed to fetch data with category, retying" + res)
       );
   }, []);
-*/
+
   useEffect(() => {
     setFlag(`https://flagcdn.com/${code?.toLocaleLowerCase()}.svg`);
   }, []);
@@ -110,7 +108,7 @@ const CountryPage = () => {
       setIsLogged(true);
     }
   }, [data]);
-  /*
+  
   useEffect(() => {
     fetchDataWithCat();
   }, [selectedCategory]);
@@ -153,7 +151,7 @@ const CountryPage = () => {
         );
     }
   };
-*/
+
   const subscribe = () => {
     updateUserInfo({
       variables: {
@@ -230,7 +228,7 @@ const CountryPage = () => {
           <img className="w-1/6 " src={flag} alt={countryName}></img>
         </span>
 
-        <div className=" grid grid-cols-4">
+        <div className=" grid lg:grid-cols-4 grid-cols-1">
           <span className=" col-span-2 pl-20">
             <div className="text-2xl font-extrabold  col-start-3">
               {code ===
@@ -247,15 +245,14 @@ const CountryPage = () => {
             <div className=" h-[500px] overflow-y-auto scrollbar">
               {countryNews ? (
                 countryNews.value.map((article, key) => (
-                  // <DisplayNews key={key} article={article} />
-                  <p>d</p>
+                   <DisplayNews key={key} article={article} />
                 ))
               ) : (
                 <span>Loading news, please wait...</span>
               )}
             </div>
           </span>
-          <div className=" text-center place-self-center w-auto h-auto col-span-2">
+          <div className=" text-center place-self-center w-full h-auto col-span-2">
             <GraphRadioButtons field={field} setField={setField} />
             <GraphData country={countryName} field={field} />
           </div>
@@ -333,7 +330,7 @@ console.log(returnedData);
   }
 
   return (
-    <ResponsiveContainer width={700} height={500}>
+    <ResponsiveContainer width={"99%"} height={500}>
       <LineChart
         data={returnedData}
         margin={{
@@ -347,8 +344,6 @@ console.log(returnedData);
         <XAxis dataKey="Year" reversed={true} />
         <YAxis />
         <Tooltip />
-        <Legend />
-
         <Line
           type="monotone"
           dataKey={field}
@@ -363,7 +358,7 @@ console.log(returnedData);
 
 const GraphRadioButtons = ({field, setField}: any) => {
   return (
-    <RadioGroup value={field} onChange={setField} className='grid grid-cols-2 text-white '>
+    <RadioGroup value={field} onChange={setField} className='grid grid-cols-1 m-2 lg:grid-cols-2 text-white '>
       <RadioGroup.Option value="Happiness_Rank" >
         {({ checked }) => (
           <span className={checked ? "bg-osmo-400 text-black rounded-full p-1" : ""}>Happiness_Rank</span>

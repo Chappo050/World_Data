@@ -1,6 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
 //COMPONENETS
 import Hamburger from "./hamburger";
 

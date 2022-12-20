@@ -1,10 +1,4 @@
-import { AnimatePresence, motion, usePresence } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
-
 import {
-  GET_ALL_COUNTRIES,
-  GET_COUNTRY_DATA,
   GET_COUNTRY_YEAR_DATA,
 } from "../queries/countryQueries";
 

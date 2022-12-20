@@ -1,22 +1,17 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 //COMPONENETS
 import Databox from "./databox";
 import worldMapData from "../topology/world-countries.json";
 import Hamburger from "./hamburger";
 import { BiSearchAlt } from "react-icons/bi";
-
-//GRAPHQL
-import { GET_ALL_COUNTRIES } from "../queries/countryQueries";
-import { useQuery } from "@apollo/client";
+import DropdownList from "./dropdownList";
 
 //LIBRARIES
-import { AnimatePresence, motion, usePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { Listbox } from "@headlessui/react";
-import { Navigate, useNavigate } from "react-router-dom";
-import DropdownList from "./dropdownList";
+import { useNavigate } from "react-router-dom";
+
 
 const geoUrl = worldMapData;
 const years = [
@@ -63,7 +58,7 @@ const World = () => {
       const country = countryListAlpha2[data as keyof typeof countryListAlpha2];
       const code = data;
       navigate(`/country/${country}/${code}`);
-    } 
+    }
     //Reload page if not found. Change later
     else window.location.reload();
   };
@@ -73,20 +68,21 @@ const World = () => {
       <div className="absolute left-0">
         <Hamburger />
       </div>
-      <div className="absolute top-10 left-[10%] z-50 text-2xl font-extrabold">
+      <div className="hidden lg:block lg:absolute top-10 left-[10%] z-50 text-2xl font-extrabold">
         <DropdownList
           selectedData={selectedYear}
           setSelectedData={setSelectedYear}
           data={years}
         />
       </div>
-      <div className="absolute top-80 left-36">
+      <div className="absolute top-80 left-36 ">
         {currentCountry !== "" ? (
           <Databox country={currentCountry} year={selectedYear.data} />
         ) : null}
       </div>
 
       <div className=" w-[60%]">
+        <p className="lg:hidden block ">World Map unavailable on this sized screen. Please type the country name in directly</p>
         <WorldMap
           hovered={hovered}
           setCurrentCountry={setCurrentCountry}
@@ -108,25 +104,6 @@ const World = () => {
         </form>
       </div>
     </div>
-  );
-};
-
-//Use like this to get data
-const DisplayCountries = () => {
-  const { loading, error, data } = useQuery(GET_ALL_COUNTRIES);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :</p>;
-
-  return data.getAllCountries.map(
-    ({ id, Country, Year, Happiness_Rank }: any) => (
-      <div key={id}>
-        <h3>{Country}</h3>
-        <p>{Year}</p>
-        <p>{Happiness_Rank}</p>
-        <br />
-      </div>
-    )
   );
 };
 
