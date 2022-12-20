@@ -6,7 +6,8 @@
   "scripts": {
     "start":"node src/app.js",
     "install-client": "cd client && npm install",
-    "postinstall":"tsc"
+    "postinstall":"tsc",
+    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "keywords": [],
   "author": "",
