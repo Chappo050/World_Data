@@ -1,6 +1,6 @@
 import { forwardRef, Key, useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 //COMPONENETS
 import Hamburger from "./hamburger";
 import  DataTooltips  from "./dataTooltips";
@@ -43,9 +43,11 @@ interface News {
 }
 
 const UserPage = () => {
+  let navigate = useNavigate()
   const { loading, error, data } = useQuery(GET_USER_INFO);
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :</p>;
+  if (error) navigate('/login');
+
 
   const userData = data;
   console.log(userData.getUserInfo.subscribedCountriesCode);

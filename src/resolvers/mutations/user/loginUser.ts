@@ -28,7 +28,11 @@ module.exports = async (_: any, { input }: any, {res, models }: any) => {
               console.log(jwt.verify(token,process.env.TOKEN_SECRET ));
               
             userFound.token = token;
-            res.cookie('token', token)
+            res.cookie('token', token, {
+              httpOnly: true
+              //secure: true, //on HTTPS
+              //domain: 'example.com', //set your domain
+            })
             resolve(userFound);
           } else {
             //Incorrect password

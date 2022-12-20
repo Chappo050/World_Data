@@ -28,6 +28,12 @@ const flash = require("express-flash");
 const compression = require("compression"); //Compression
 const helmet = require("helmet"); //Protection
 
+interface UserCookie {
+  username: String,
+  iat: Number,
+  exp: Number
+}
+
 export async function startApolloServer(typeDefs: any, resolvers: any) {
   //SERVER SETUP STUFF
   var app = express();
@@ -58,10 +64,13 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context: ({ req, res }) => {
       //can move into each resolver if needed.
-      let user: String | null;
+      let user: UserCookie| null;
       if (req.cookies["token"]) {
         user = decodedToken(req);
-        console.log(user);
+        if (user) {
+          console.log(user.username);
+          
+        }
       } else {
         user = null;
       }
@@ -137,7 +146,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
   //Middleware
-  app.use(cors({ origin: "*", credentials: true }));
+  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
   app.use(flash());
   app.use(helmet());
   app.use(

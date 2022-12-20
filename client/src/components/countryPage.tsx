@@ -1,11 +1,8 @@
-import { AnimatePresence, motion, usePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 //COMPONENETS
 import Hamburger from "./hamburger";
 import DataTooltips from "./dataTooltips";
-import { FcNext } from "react-icons/fc";
-import { FcPrevious } from "react-icons/fc";
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import DropdownList from "./dropdownList";
@@ -57,10 +54,13 @@ interface News {
 
 const CountryPage = () => {
   const { loading, error, data } = useQuery(GET_USER_INFO);
-  const [updateUserInfo, { loading:update_loading, error:update_error, data:update_data }] = useMutation(UPDATE_USER_INFO);
+  const [
+    updateUserInfo,
+    { loading: update_loading, error: update_error, data: update_data },
+  ] = useMutation(UPDATE_USER_INFO);
+  const [isLogged, setIsLogged] = useState<Boolean>(false)
   const [countryNews, setCountryNews] = useState<News>();
   const [isSubscribed, setIsSubscribed] = useState<Boolean>(false);
-  const [pointer, setPointer] = useState<number>(3);
   const [flag, setFlag] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(newsCatagories[5]);
   let { countryName, code } = useParams();
@@ -95,6 +95,9 @@ const CountryPage = () => {
       if (countryCodeList.includes(code)) {
         setIsSubscribed(true);
       }
+    }
+    if (data) {
+      setIsLogged(true)
     }
   }, [data]);
 
@@ -141,22 +144,6 @@ const CountryPage = () => {
     }
   };
 
-  const HandlePointerIncrease = () => {
-    if (countryNews?.value.length) {
-      if (countryNews.value.length >= pointer + 3) {
-        setPointer(pointer + 3);
-      }
-    }
-  };
-
-  const HandlePointerDecrease = () => {
-    if (countryNews?.value.length) {
-      if (pointer - 3 >= 3) {
-        setPointer(pointer - 3);
-      }
-    }
-  };
-
   const subscribe = () => {
     updateUserInfo({
       variables: {
@@ -171,7 +158,9 @@ const CountryPage = () => {
           ],
         },
       },
-    }).then(  res =>   setIsSubscribed(true)).catch((err) => console.log(err));
+    })
+      .then((res) => setIsSubscribed(true))
+      .catch((err) => console.log(err));
   };
 
   const unsubscribe = () => {
@@ -188,7 +177,9 @@ const CountryPage = () => {
           subscribedCountriesName: [...updatedListName],
         },
       },
-    }).then(  res =>   setIsSubscribed(false)).catch((err) => console.log(err));
+    })
+      .then((res) => setIsSubscribed(false))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -198,7 +189,7 @@ const CountryPage = () => {
       </div>
 
       <div className="flex flex-col">
-        {isSubscribed ? (
+      {isLogged? <> {isSubscribed ? (
           <button
             onClick={() => unsubscribe()}
             className=" w-auto bg-osmo-800 justify-center hover:bg-osmo-500"
@@ -213,7 +204,9 @@ const CountryPage = () => {
           >
             Subscribe
           </button>
-        )}
+        )}</>: <></>}
+       
+       
 
         <span className="text-center justify-center text-6xl">
           {countryName}
@@ -236,20 +229,16 @@ const CountryPage = () => {
                 <></>
               )}
             </div>
-            {countryNews ? (
-              countryNews.value
-                .slice(pointer - 3, pointer)
-                .map((article, key) => (
-                  <div>
-                  <p className="relative text-3xl"> {countryName}</p>  
-                  <div key={key} className=" h-96 overflow-y-auto scrollbar">
-                  <DisplayNews key={key} article={article} />
-                  </div>
-                  </div>
-                ))
-            ) : (
-              <></>
-            )}
+            <div className=" h-[500px] overflow-y-auto scrollbar">
+              {countryNews ? (
+                countryNews.value
+                  .map((article, key) => (
+                    <DisplayNews key={key} article={article} />
+                  ))
+              ) : (
+                <></>
+              )}
+            </div>
           </span>
           <div className=" text-center place-self-center w-auto h-auto col-span-2">
             <DisplayCountries country={countryName} />
