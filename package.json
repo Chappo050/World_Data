@@ -5,6 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "start":"node src/app.js",
+    "install-client": "cd client && npm install",
     "postinstall":"tsc"
   },
   "keywords": [],
