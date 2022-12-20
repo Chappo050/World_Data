@@ -2,10 +2,10 @@
   "name": "world_data",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "app.ts",
   "scripts": {
     "build": "cd client && npm run build",
-    "start": "node dist/app.js",
+    "start": "ts-node ./src/app.ts",
     "install-client": "cd client && npm install",
     "postinstall":"tsc",
     "heroku-postbuild": "npm run install-client && npm run build"
