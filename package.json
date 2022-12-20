@@ -6,9 +6,9 @@
   "scripts": {
       "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
+    "postinstall": "tsc",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "server": "node ./src/app.ts",
-    "start-local": "node ./src/app.ts",
+    "server": "node ./dist/app.js",
     "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
     "start": "npm run server"
   },
