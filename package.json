@@ -5,7 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "build": "cd client && npm run build",
-    "start":"node src/app.ts",
+    "start": "node dist/src/index.js",
     "install-client": "cd client && npm install",
     "postinstall":"tsc",
     "heroku-postbuild": "npm run install-client && npm run build"
