@@ -4,11 +4,11 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "build": "cd client && npm run build",
+      "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "server": "node ./bin/www",
-    "start-local": "node ./bin/www",
+    "server": "node ./src/app.ts",
+    "start-local": "node ./src/app.ts",
     "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
     "start": "npm run server"
   },
