@@ -29,9 +29,9 @@ const compression = require("compression"); //Compression
 const helmet = require("helmet"); //Protection
 
 interface UserCookie {
-  username: String,
-  iat: Number,
-  exp: Number
+  username: String;
+  iat: Number;
+  exp: Number;
 }
 
 export async function startApolloServer(typeDefs: any, resolvers: any) {
@@ -64,12 +64,11 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context: ({ req, res }) => {
       //can move into each resolver if needed.
-      let user: UserCookie| null;
+      let user: UserCookie | null;
       if (req.cookies["token"]) {
         user = decodedToken(req);
         if (user) {
           console.log(user.username);
-          
         }
       } else {
         user = null;
@@ -81,7 +80,6 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
 
   await server.start(); //start the GraphQL server.
   server.applyMiddleware({ app });
-
 
   //END SERVER SETUP
 
@@ -100,16 +98,26 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   //Middleware
   app.use(cors({ origin: "URL ALLOWED", credentials: true }));
   app.use(flash());
-  app.use(helmet());
-  app.use(helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'", 'https://glacial-tor-64648.herokuapp.com/graphql','https://flagcdn.com/'],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      connectSrc: ["https://bing-news-search1.p.rapidapi.com/news", 'https://flagcdn.com/', 'https://glacial-tor-64648.herokuapp.com/graphql'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://flagcdn.com/'],
-      imgSrc: ["https://flagcdn.com/"],
-    },
-  }));
+  app.use(helmet({ crossOriginEmbedderPolicy: false }));
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: [
+          "'self'",
+          "https://glacial-tor-64648.herokuapp.com/graphql",
+          "https://flagcdn.com/",
+        ],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        connectSrc: [
+          "https://bing-news-search1.p.rapidapi.com/news",
+          "https://flagcdn.com/",
+          "https://glacial-tor-64648.herokuapp.com/graphql",
+        ],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://flagcdn.com/"],
+        imgSrc: ["https://flagcdn.com/"],
+      },
+    })
+  );
   app.use(
     helmet({
       contentSecurityPolicy: false,
@@ -143,7 +151,6 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     res.status(err.status || 500);
     res.json({ error: err });
   });
-
 
   await new Promise<void>((resolve) => httpServer.listen(port, resolve));
 
@@ -194,11 +201,9 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     debug("Listening on " + bind);
   }
 
-
   app.get("/*", function (req: Request, res: Response) {
     res.sendFile(path.join(__dirname, "../client/public/index.html"));
   });
-
 }
 
 startApolloServer(typeDefs, resolvers);
