@@ -161,7 +161,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
 
   app.use(compression()); //Compress all routes
   app.use(express.static(path.join(__dirname, "public")));
-  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.use(express.static(path.join(__dirname, "../client", "build")));
 
   app.get("/*", function (req: Request, res: Response) {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
