@@ -10,7 +10,7 @@ const RouteSwitch = () => {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path="" element={<App />} />
+        <Route path="/" element={<App />} />
         <Route path="world" element={<World />} />
         <Route path="country/:countryName/:code" element={<CountryPage />}  />
         <Route path="profile" element={<Profile />} />
