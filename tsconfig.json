@@ -10,5 +10,5 @@
       "lib": ["es2018", "esnext.asynciterable"],
   },
   "exclude": ["node_modules"],
-  "files":["src/types.d.ts"]
+  "files":["types.d.ts"]
 }
