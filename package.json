@@ -7,7 +7,7 @@
     "build": "cd client && npm run build",
     "start": "node ./dist/app.js",
     "install-client": "cd client && npm install",
-    "postinstall": "tsc && mv -i -v public dist/ && rm -v -rf src",
+    "postinstall": "tsc",
     "heroku-postbuild": "npm run install-client && npm run build"
   },
   "keywords": [],
