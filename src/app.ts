@@ -103,10 +103,10 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.use(helmet());
   app.use(helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'", 'https://glacial-tor-64648.herokuapp.com/graphql'],
+      defaultSrc: ["'self'", 'https://glacial-tor-64648.herokuapp.com/graphql','https://flagcdn.com/'],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       connectSrc: ["https://bing-news-search1.p.rapidapi.com/news", 'https://flagcdn.com/', 'https://glacial-tor-64648.herokuapp.com/graphql'],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://flagcdn.com/'],
       imgSrc: ["https://flagcdn.com/"],
     },
   }));
