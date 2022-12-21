@@ -160,8 +160,11 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.use(express.json());
 
   app.use(compression()); //Compress all routes
-  app.use(express.static(path.join(__dirname, "../client/build", 'index.html')));
+  app.use(express.static(path.join(__dirname, "client", "build")));
 
+  app.get("/*", function (req: Request, res: Response) {
+    res.sendFile(path.join(__dirname, "client","build", "index.html"));
+  });
 
   // catch 404 and forward to error handler
   app.use(function (req: Request, res: Response, next: NextFunction) {
