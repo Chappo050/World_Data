@@ -1,4 +1,5 @@
 //COMPONENETS
+import { Link } from "react-router-dom";
 import Hamburger from "./components/hamburger";
 
 //LIBRARIES
@@ -15,6 +16,7 @@ const App = () => {
         </p>
         <p>
           Navigate to the{" "}
+          <Link to={'/world'}>Try here</Link>
           <a
             href="/world"
             className=" underline text-blue-500 hover:bg-osmo-700"
