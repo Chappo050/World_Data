@@ -98,9 +98,17 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
   //Middleware
-  app.use(cors({ origin: "*", credentials: true }));
+  app.use(cors({ origin: "URL ALLOWED", credentials: true }));
   app.use(flash());
   app.use(helmet());
+  app.use(helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'"],
+    },
+  }));
   app.use(
     helmet({
       contentSecurityPolicy: false,
