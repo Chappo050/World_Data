@@ -114,10 +114,6 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   app.use(compression()); //Compress all routes
   app.use(express.static(path.join(__dirname, "../client/build")));
 
-  app.get("/*", function (req: Request, res: Response) {
-    res.sendFile(path.join(__dirname, "../client/public/index.html"));
-  });
-
   // catch 404 and forward to error handler
   app.use(function (req: Request, res: Response, next: NextFunction) {
     next(createError(404));
@@ -189,6 +185,10 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     debug("Listening on " + bind);
   }
 
+
+  app.get("/*", function (req: Request, res: Response) {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  });
 
 }
 
