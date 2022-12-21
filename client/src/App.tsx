@@ -16,14 +16,7 @@ const App = () => {
         </p>
         <p>
           Navigate to the{" "}
-          <Link to={'/world'}>Try here</Link>
-          <a
-            href="/world"
-            className=" underline text-blue-500 hover:bg-osmo-700"
-          >
-            {" "}
-            WORLD MAP
-          </a>{" "}
+          <Link className=" underline text-blue-500 hover:bg-osmo-700" to={'/world'}>World Map</Link>
           and click or search for a country.
         </p>
         <br />

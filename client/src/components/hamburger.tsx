@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaHamburger } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "../queries/userQueries";
-
+import { Link } from "react-router-dom";
 const Hamburger = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [logoutUser] = useMutation(LOGOUT_USER);
@@ -38,67 +38,67 @@ const Hamburger = () => {
           </button>
         </div>
         <nav className="mt-10 flex flex-col gap-10 items-center justify-between text-xl">
-          <button
+          <Link
+          to={'/'}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin;
               setIsOpen(false);
             }}
             className="rounded-full md:py-1 md:mx-5"
           >
             HOME
-          </button>
-          <button
+          </Link>
+          <Link
+          to={"/world"}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin + "/world";
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
             WORLD MAP
-          </button>
-          <button
+          </Link>
+          <Link
+          to={"/profile"}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin + "/profile";
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
             Profile
-          </button>
-          <button
+          </Link>
+          <Link
+          to={"/login"}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin + "/login";
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
             Login
-          </button>
-          <button
+          </Link>
+          <Link
+                  to={"/register"}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = window.location.origin + "/register";
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
             Register
-          </button>
-          <button
+          </Link>
+          <Link
+          to={'/'}
             onClick={(e) => {
               e.preventDefault();
               handleLogout();
-              window.location.href = window.location.origin;
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
-          >
+          > 
             Logout
-          </button>
+          </Link>
         </nav>
       </div>
     </div>
