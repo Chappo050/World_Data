@@ -105,6 +105,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      connectSrc: ["https://bing-news-search1.p.rapidapi.com/news", 'https://flagcdn.com/'],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'"],
     },
