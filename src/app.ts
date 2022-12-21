@@ -146,7 +146,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
   db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
   //Middleware
-  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+  app.use(cors({ origin: "*", credentials: true }));
   app.use(flash());
   app.use(helmet());
   app.use(
