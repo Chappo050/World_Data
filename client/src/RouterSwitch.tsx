@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { HashRouter } from "react-router-dom";
 import App from "./App";
 import CountryPage from "./components/countryPage";
 import World from "./components/worldPage";
@@ -8,7 +8,7 @@ import Register from "./components/registerPage";
 import Login from "./components/loginPage";
 const RouteSwitch = () => {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/world" element={<World />} />
@@ -17,7 +17,7 @@ const RouteSwitch = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
