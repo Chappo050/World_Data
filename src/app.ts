@@ -107,7 +107,7 @@ export async function startApolloServer(typeDefs: any, resolvers: any) {
           "https://glacial-tor-64648.herokuapp.com/graphql",
           "https://flagcdn.com/",
         ],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'",  "https://flagcdn.com/"],
         connectSrc: [
           "https://bing-news-search1.p.rapidapi.com/news",
           "https://flagcdn.com/",

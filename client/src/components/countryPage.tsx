@@ -225,7 +225,7 @@ const CountryPage = () => {
           {countryName}
         </span>
         <span className="justify-center flex m-10">
-          <img className="w-1/6 " src={flag} alt={countryName}></img>
+          <img className="w-1/6 " src={flag} alt={countryName} crossOrigin='anonymous'></img>
         </span>
 
         <div className=" grid lg:grid-cols-4 grid-cols-1">
