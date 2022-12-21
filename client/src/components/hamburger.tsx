@@ -41,7 +41,6 @@ const Hamburger = () => {
           <Link
           to={'/'}
             onClick={(e) => {
-              e.preventDefault();
               setIsOpen(false);
             }}
             className="rounded-full md:py-1 md:mx-5"
@@ -51,7 +50,6 @@ const Hamburger = () => {
           <Link
           to={"/world"}
             onClick={(e) => {
-              e.preventDefault();
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
@@ -61,7 +59,6 @@ const Hamburger = () => {
           <Link
           to={"/profile"}
             onClick={(e) => {
-              e.preventDefault();
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
@@ -71,7 +68,6 @@ const Hamburger = () => {
           <Link
           to={"/login"}
             onClick={(e) => {
-              e.preventDefault();
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
@@ -81,7 +77,6 @@ const Hamburger = () => {
           <Link
                   to={"/register"}
             onClick={(e) => {
-              e.preventDefault();
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
@@ -91,7 +86,6 @@ const Hamburger = () => {
           <Link
           to={'/'}
             onClick={(e) => {
-              e.preventDefault();
               handleLogout();
               setIsOpen(false);
             }}
