@@ -2,10 +2,10 @@
   "name": "world_data",
   "version": "1.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "app.js",
   "scripts": {
     "build": "cd client && npm run build",
-    "start": "ts-node ./src/app.ts",
+    "start": "node ./dist/app.js",
     "install-client": "cd client && npm install",
     "postinstall":"tsc",
     "heroku-postbuild": "npm run install-client && npm run build"
@@ -32,8 +32,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.1",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "ts-node" : "^10.9.1" 
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
