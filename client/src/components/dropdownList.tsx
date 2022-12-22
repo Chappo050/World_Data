@@ -3,7 +3,7 @@ import { Listbox } from "@headlessui/react";
 function DropdownList({ selectedData, setSelectedData, data }: any) {
   return (
     <Listbox value={selectedData} onChange={setSelectedData}>
-      <Listbox.Button className="bg-osmo-200 hover:bg-osmo-400 rounded-full p-2 text-center">
+      <Listbox.Button className="bg-osmo-300 hover:bg-osmo-400 rounded-full p-2 text-center">
         {selectedData.data}
       </Listbox.Button>
 

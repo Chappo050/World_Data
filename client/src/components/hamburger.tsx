@@ -63,7 +63,7 @@ const Hamburger = () => {
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
-            Profile
+            PROFILE
           </Link>
           <Link
           to={"/login"}
@@ -72,7 +72,7 @@ const Hamburger = () => {
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
-            Login
+            LOGIN
           </Link>
           <Link
                   to={"/register"}
@@ -81,18 +81,18 @@ const Hamburger = () => {
             }}
             className=" rounded-full md:py-1 md:mx-5"
           >
-            Register
+            REGISTER
           </Link>
-          <Link
-          to={'/'}
+          <a
+          href='/'
             onClick={(e) => {
               handleLogout();
               setIsOpen(false);
             }}
             className=" rounded-full md:py-1 md:mx-5"
           > 
-            Logout
-          </Link>
+            LOGOUT
+          </a>
         </nav>
       </div>
     </div>

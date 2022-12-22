@@ -230,7 +230,7 @@ const CountryPage = () => {
 
         <div className=" grid lg:grid-cols-4 grid-cols-1">
           <span className=" col-span-2 pl-20">
-            <div className="text-2xl font-extrabold  col-start-3">
+            <div className="text-2xl font-extrabold  col-start-2 flex">
               {code ===
               ("AU" || "CA" || "CN" || "IN" || "JP" || "GB" || "US") ? (
                 <DropdownList
